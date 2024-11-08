@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask To-Do App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <form action="{{ url_for('main.add_task') }}" method="post">
+        <input type="text" name="title" placeholder="Add a new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task.title }}
+                {% if not task.complete %}
+                    <form action="{{ url_for('main.complete_task', task_id=task.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Mark as Complete</button>
+                    </form>
+                {% else %}
+                    <strong>✔ Completed</strong>
+                    <form action="{{ url_for('main.unmark_task', task_id=task.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Unmark</button>
+                    </form>
+                {% endif %}
+                <form action="{{ url_for('main.delete_task', task_id=task.id) }}" method="post" style="display:inline;">
+                    <button type="submit" style="color: red;">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
